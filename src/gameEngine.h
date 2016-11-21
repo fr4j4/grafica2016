@@ -2,7 +2,7 @@
 #define GAMEENGINE_H
 #include <string>
 
-#include "gl_utils.h"
+//#include "gl_utils.h"
 
 using namespace std;
 class gameEngine {
