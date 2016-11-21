@@ -1,7 +1,7 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 #include <string>
-
+#include "player.h"
 //#include "gl_utils.h"
 
 using namespace std;
@@ -21,6 +21,7 @@ public:
 	void set_debug_mode(int debug);
 	void debug(string message);
 	void show_main_menu();
+	void load_scenario(string scenario_name,player* player);
 
 };
 
