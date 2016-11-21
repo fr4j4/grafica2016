@@ -16,9 +16,14 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <iostream>
 #include <assert.h>
 #define GL_LOG_FILE "gl.log"
 #define MAX_SHADER_LENGTH 262144
+
+using namespace std;
+
+/*--------------------------------TEST----------------------------------------*/
 
 /*--------------------------------LOG FUNCTIONS-------------------------------*/
 bool restart_gl_log () {

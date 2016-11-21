@@ -23,6 +23,8 @@
 extern int g_gl_width;
 extern int g_gl_height;
 extern GLFWwindow* g_window;
+/*---------------------------------TEST---------------------------------------*/
+
 /*--------------------------------LOG FUNCTIONS-------------------------------*/
 bool restart_gl_log ();
 bool gl_log (const char* message, ...);
