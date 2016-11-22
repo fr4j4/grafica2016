@@ -15,16 +15,18 @@ class gameEngine {
 			paused=false
 		;
 
-		void init();
+		void initGL();
 
 	public:
 		gameEngine();
 		~gameEngine();
 
 		void start();
+		void read_input_keys();
+		void setScreenSize(int,int);
 		void pause(bool p);
 		void set_debug_mode(int debug);
-		void debug(std::string message);
+		void debug(int,std::string message);
 		void show_main_menu();
 		void load_scenario(std::string scenario_name,player* player);
 };
