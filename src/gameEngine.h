@@ -8,15 +8,22 @@
 
 class gameEngine {
 	private:
-		int debug_mode=0
-		;
+		int debug_mode=0;
 		bool 
 			running=false,
-			paused=false
+			paused=false,
+			load_lvl=false,
+			f1_pressed=false,
+			f2_pressed=false,
+			f3_pressed=false,
+			f4_pressed=false,
+			f5_pressed=false
 		;
 
-		void initGL();
+		std::string maps[4]={"map1","map2","map3","map4"};
 
+		void initGL();
+		void menu();
 	public:
 		gameEngine();
 		~gameEngine();
@@ -26,9 +33,10 @@ class gameEngine {
 		void setScreenSize(int,int);
 		void pause(bool p);
 		void set_debug_mode(int debug);
-		void debug(int,std::string message);
+		void debug(std::string message,int kind);
 		void show_main_menu();
 		void load_scenario(std::string scenario_name,player* player);
-};
 
+		void createMenu();
+};
 #endif

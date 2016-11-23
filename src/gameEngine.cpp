@@ -1,11 +1,23 @@
 #include "gameEngine.h"
 #include <string>
 #include <iostream>
-#include "maths_funcs.h"
-#include "player.h"
+#define DBG_NONE 0
 #define DBG_INFO 1
 #define DBG_WARNING 2
 #define DBG_ERROR 3
+#define DBG_MSG 4
+#define DBG_KEY_PRESSED 5
+#define DBG_KEY_RELEASED 6
+#include "maths_funcs.h"
+#include "player.h"
+#include <GL/glut.h> 
+
+#ifdef __cplusplus__
+  #include <cstdlib>
+#else
+  #include <stdlib.h>
+#endif
+
 using namespace std;
 
 int g_gl_width=0;
@@ -14,74 +26,166 @@ GLFWwindow* g_window = NULL;
 
 gameEngine::gameEngine(){
 	setScreenSize(800,600);
+	debug_mode=1;
+	/*
+	debug("Message.",DBG_MSG);
+	debug("Error.",DBG_ERROR);
+	debug("Information.",DBG_INFO);
+	debug("Warning.",DBG_WARNING);
+	*/
 }
 
 void gameEngine::setScreenSize(int width,int height){
 	g_gl_height=height;
 	g_gl_width=width;
+	debug("Screen size set at "+to_string(width)+"x"+to_string(height)+".",DBG_INFO);
 }	
 
 void gameEngine::read_input_keys(){
+	string nombre_mapa="";
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_ESCAPE)) {
 		glfwSetWindowShouldClose (g_window, 1);
 		running=false;
-		debug(DBG_INFO,"[INFO] ESC pressed... quitting.");
-	}		
+		debug("ESC",DBG_KEY_PRESSED);
+		debug("ESC pressed... quitting.",DBG_INFO);
+	}
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_C)) {
+		debug("C",DBG_KEY_PRESSED);
+		if (system("CLS")) system("clear");
+	}
+	if(!load_lvl){
+		if(!f1_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F1)){
+			load_lvl=true;
+			f1_pressed=true;
+			nombre_mapa=maps[0];
+			debug("F1",DBG_KEY_PRESSED);
+		}
+		if(f1_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F1)){
+			f1_pressed=false;
+			debug("F1",DBG_KEY_RELEASED);
+		}
+		if(!f2_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F2)){
+			load_lvl=true;
+			f2_pressed=true;
+			nombre_mapa=maps[1];
+			debug("F2",DBG_KEY_PRESSED);
+		}
+		if(f2_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F2)){
+			f2_pressed=false;
+			debug("F2",DBG_KEY_RELEASED);
+		}
+
+		if(!f3_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F3)){
+			load_lvl=true;
+			f3_pressed=true;
+			nombre_mapa=maps[2];
+			debug("F3",DBG_KEY_PRESSED);
+		}
+		if(f3_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F3)){
+			f3_pressed=false;
+			debug("F3",DBG_KEY_RELEASED);
+		}
+		if(!f4_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F4)){
+			load_lvl=true;
+			f4_pressed=true;
+			nombre_mapa=maps[3];
+			debug("F4",DBG_KEY_PRESSED);
+		}
+		if(f4_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F4)){
+			f4_pressed=false;
+			debug("F4",DBG_KEY_RELEASED);
+		}
+
+	}if(load_lvl){
+		if(nombre_mapa!=""){
+			debug("loading level...["+nombre_mapa+"]",DBG_INFO);
+			load_scenario(nombre_mapa,NULL);
+		}
+		load_lvl=false;
+	}
 }
 
 void gameEngine::start(){
-	debug(DBG_INFO,"[INFO] Game engine started");
+	debug("Game engine started",DBG_INFO);
 	initGL();
 	running=true;
+	//load_scenario();
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport (0, 0, g_gl_width, g_gl_height);
-		// update other events like input handling 
 		glfwPollEvents ();
 		read_input_keys();
+		
+
 		glfwSwapBuffers (g_window);
 	}
 	glfwTerminate();
-	debug(DBG_INFO,"[INFO] Game engine stopped");
+	debug("Game engine stopped",DBG_INFO);
 }
 
 void gameEngine::pause(bool p){
 	paused=p;
 	if(p){
-		debug(DBG_INFO,"[INFO] Game engine paused");
+		debug("Game engine paused",DBG_INFO);
 	}else{
-		debug(DBG_INFO,"[INFO] Game engine resumed");
+		debug("Game engine resumed",DBG_INFO);
 	}
 }
 
 void gameEngine::show_main_menu(){
-	debug(DBG_INFO,"[INFO] Showing Main Menu");
+	debug("Showing Main Menu",DBG_INFO);
 }
 
-void gameEngine::debug(int type,string msg){
-	string fg_color="",f_color="";
-	switch(type){
+void gameEngine::debug(string msg,int kind=0){
+	string fg_color="",f_color="\x1B[36m";
+	string prefix=" [\x1B[36m--DEBUG\x1B[0m] ";
+	switch(kind){
 		case DBG_INFO:
+			prefix=" \x1B[45m\x1B[37m INF \x1B[0m ";
 			fg_color="\x1B[40m";
 			f_color="\x1B[35m";
 		break;
 		case DBG_WARNING:
+		 	prefix=" \x1B[43m\x1B[37m WAR \x1B[0m ";
 			fg_color="\x1B[40m";
-			f_color="\x1B[35m";
+			f_color="\x1B[33m";
 		break;
 		case DBG_ERROR:
+			prefix=" \x1B[41m\x1B[37m ERR \x1B[0m ";
 			fg_color="\x1B[40m";
-			f_color="\x1B[35m";
+			f_color="\x1B[31m";
+			break;
+		case DBG_MSG:
+			prefix=" \x1B[42m\x1B[30m MSG \x1B[0m ";
+			fg_color="\x1B[40m";
+			f_color="\x1B[32m";
 		break;
-
+		case DBG_KEY_PRESSED:
+			prefix=" [KEY_PRESSED] ";
+			fg_color="\x1B[40m";
+			f_color="\x1B[37m";
+		break;
+		case DBG_KEY_RELEASED:
+			prefix=" [DBG_KEY_RELEASED] ";
+			fg_color="\x1B[40m";
+			f_color="\x1B[37m";
+		break;
+		default:
+			break;
 	}
 	if(debug_mode==1){
-		cout<<fg_color<<f_color<<msg<<"\x1B[0m"<<endl;
+		cout<<prefix<<fg_color<<f_color<<msg<<"\x1B[0m"<<endl;
 	}
 }
 void gameEngine::set_debug_mode(int deb){
+	debug_mode=1;
+	if(deb==1){
+		debug("Debug mode: ENABLED",DBG_MSG);
+	}else{
+		debug("Debug mode: DISABLED",DBG_MSG);
+	}
 	debug_mode=deb;
-	cout<<"*** Debug mode set to: "<<deb<<" ***"<<endl;
+	
 }
 
 void gameEngine::initGL(){
@@ -97,5 +201,8 @@ void gameEngine::initGL(){
 }
 
 void gameEngine::load_scenario(std::string scenario_name,player* player){
-	debug(DBG_INFO,"Loading scenario "+scenario_name+"...");
+	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
+	pause(true);
+	pause(false);
+	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
 }

@@ -1,0 +1,8 @@
+<map>
+	<player>
+		<posx>0</posx>
+		<posy>1</posy>
+		<posz>2</posz>
+		<life>100</life>
+	</player>
+</map>

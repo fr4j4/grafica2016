@@ -11,8 +11,8 @@ int main(int argc, char const *argv[]){
 	}
 	
 	gameEngine *ge=new gameEngine();
-	//ge->setScreenSize(800,600);
 	ge->set_debug_mode(debug_mode);
+	ge->setScreenSize(800,600);
 	ge->start();
 	
 	return 0;

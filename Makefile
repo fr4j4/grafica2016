@@ -1,5 +1,4 @@
 src=src/*.cpp
-
 output=bin/prog
 libs=-lGL -lGLEW -lglfw -lassimp
 debug=1
