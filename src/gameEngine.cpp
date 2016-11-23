@@ -1,16 +1,11 @@
-#include "gameEngine.h"
 #include <string>
 #include <iostream>
-#define DBG_NONE 0
-#define DBG_INFO 1
-#define DBG_WARNING 2
-#define DBG_ERROR 3
-#define DBG_MSG 4
-#define DBG_KEY_PRESSED 5
-#define DBG_KEY_RELEASED 6
-#include "maths_funcs.h"
-#include "player.h"
+#include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GL/glut.h> 
+#include "maths_funcs.h"
+#include "gameEngine.h"
+#include "player.h"
+#include "tools.h"
 
 #ifdef __cplusplus__
   #include <cstdlib>
@@ -18,21 +13,30 @@
   #include <stdlib.h>
 #endif
 
+#define DBG_DBG 0
+#define DBG_INFO 1
+#define DBG_WARNING 2
+#define DBG_ERROR 3
+#define DBG_MSG 4
+#define DBG_KEY_PRESSED 5
+#define DBG_KEY_RELEASED 6
+
+#define VERTEX_SHADER_FILE "shaders/test_vs.glsl"
+#define FRAGMENT_SHADER_FILE "shaders/test_fs.glsl"
+
+#include <math.h>
+
 using namespace std;
 
 int g_gl_width=0;
 int	g_gl_height=0;
 GLFWwindow* g_window = NULL;
+GLuint shader_programme;
+
 
 gameEngine::gameEngine(){
 	setScreenSize(800,600);
 	debug_mode=1;
-	/*
-	debug("Message.",DBG_MSG);
-	debug("Error.",DBG_ERROR);
-	debug("Information.",DBG_INFO);
-	debug("Warning.",DBG_WARNING);
-	*/
 }
 
 void gameEngine::setScreenSize(int width,int height){
@@ -106,21 +110,81 @@ void gameEngine::read_input_keys(){
 }
 
 void gameEngine::start(){
-	debug("Game engine started",DBG_INFO);
 	initGL();
+	initCam();
 	running=true;
-	//load_scenario();
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
+		static double previous_seconds = glfwGetTime ();
+		double current_seconds = glfwGetTime ();
+		double elapsed_seconds = current_seconds - previous_seconds;
+		previous_seconds = current_seconds;
+		_update_fps_counter (g_window);
+
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport (0, 0, g_gl_width, g_gl_height);
+		glUseProgram (shader_programme);
 		glfwPollEvents ();
-		read_input_keys();
 		
 
-		glfwSwapBuffers (g_window);
+		glBindVertexArray(p->getVao());
+		glDrawArrays(GL_TRIANGLES,0,p->getnumVertices());
+
+
+		cam_pos[2]-=0.25f*elapsed_seconds;
+		
+		read_input_keys();
+	//if (true) {
+		mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2])); // cam translation
+		mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw); // 
+		mat4 view_mat = R * T;
+		glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
+	//}
+
+	glfwSwapBuffers (g_window);
 	}
+
+
 	glfwTerminate();
 	debug("Game engine stopped",DBG_INFO);
+
+}
+
+void gameEngine::initCam(){
+	p=new player();
+	debug("Player created",DBG_DBG);
+	debug("Game engine started",DBG_INFO);
+
+	#define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
+	// input variables
+	float near = 0.1f; // clipping plane
+	float far = 100.0f; // clipping plane
+	float fov = 67.0f * ONE_DEG_IN_RAD; // convert 67 degrees to radians
+	float aspect = (float)g_gl_width / (float)g_gl_height; // aspect ratio
+	// matrix components
+	float range = tan (fov * 0.5f) * near;
+	float Sx = (2.0f * near) / (range * aspect + range * aspect);
+	float Sy = near / range;
+	float Sz = -(far + near) / (far - near);
+	float Pz = -(2.0f * far * near) / (far - near);
+
+	GLfloat proj_mat[] = {
+		Sx, 0.0f, 0.0f, 0.0f,
+		0.0f, Sy, 0.0f, 0.0f,
+		0.0f, 0.0f, Sz, -1.0f,
+		0.0f, 0.0f, Pz, 0.0f
+	};
+
+	
+	mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2]));
+	mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw);
+	mat4 view_mat = R * T;
+
+	view_mat_location = glGetUniformLocation (shader_programme, "view");
+	glUseProgram (shader_programme);
+	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
+	proj_mat_location = glGetUniformLocation (shader_programme, "proj");
+	glUseProgram (shader_programme);
+	glUniformMatrix4fv (proj_mat_location, 1, GL_FALSE, proj_mat);
 }
 
 void gameEngine::pause(bool p){
@@ -184,8 +248,7 @@ void gameEngine::set_debug_mode(int deb){
 	}else{
 		debug("Debug mode: DISABLED",DBG_MSG);
 	}
-	debug_mode=deb;
-	
+	debug_mode=deb;	
 }
 
 void gameEngine::initGL(){
@@ -198,11 +261,13 @@ void gameEngine::initGL(){
 	glFrontFace (GL_CCW); // set counter-clock-wise vertex order to mean the front
 	glClearColor (0.2, 0.2, 0.2, 1.0); // grey background to help spot mistakes
 	glViewport (0, 0, g_gl_width, g_gl_height);
+	shader_programme = create_programme_from_files (VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
 }
 
 void gameEngine::load_scenario(std::string scenario_name,player* player){
 	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
+
 	pause(false);
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
 }
