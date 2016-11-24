@@ -35,7 +35,8 @@ class gameEngine {
 	private:
 		camera *cam;
 		player *p;
-		int debug_mode=0;
+		int debug_mode=0,
+			debug_keys=0;
 		bool 
 			running=false,
 			paused=false,

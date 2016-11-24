@@ -117,10 +117,11 @@ void gameEngine::start(){
 		glBindVertexArray(p->getVao());
 		glDrawArrays(GL_TRIANGLES,0,p->getnumVertices());
 		
-		if(!paused){
-			cam->move(0,0,-elapsed_seconds);
-		}
 		read_input_keys();
+		
+		if(!paused){
+			//cam->move(0,0,-elapsed_seconds);
+		}
 
 
 	glfwSwapBuffers (g_window);
@@ -182,7 +183,13 @@ void gameEngine::debug(string msg,int kind=0){
 			break;
 	}
 	if(debug_mode==1){
-		cout<<prefix<<fg_color<<f_color<<msg<<"\x1B[0m"<<endl;
+		if(kind==DBG_KEY_RELEASED||kind==DBG_KEY_PRESSED){
+			if(debug_keys==1){
+				cout<<prefix<<fg_color<<f_color<<msg<<"\x1B[0m"<<endl;
+			}
+		}else{
+			cout<<prefix<<fg_color<<f_color<<msg<<"\x1B[0m"<<endl;
+		}
 	}
 }
 void gameEngine::set_debug_mode(int deb){
