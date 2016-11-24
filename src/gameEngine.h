@@ -31,10 +31,9 @@
 
 using namespace std;
 
-
-
 class gameEngine {
 	private:
+		camera *cam;
 		player *p;
 		int debug_mode=0;
 		bool 
@@ -45,8 +44,10 @@ class gameEngine {
 			f2_pressed=false,
 			f3_pressed=false,
 			f4_pressed=false,
-			f5_pressed=false
+			f5_pressed=false,
+			p_pressed=false
 		;
+
 		std::string maps[4]={"map1","map2","map3","map4"};
 
 		void initGL();

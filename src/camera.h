@@ -7,7 +7,6 @@
 
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
 
-
 class camera{
 private:
 	int screenWidth=0,screenHeight=0;
@@ -17,12 +16,6 @@ private:
 	float cam_yaw = 0.0f; // y-rotation in degrees
 	int view_mat_location=0;
 	int proj_mat_location=0;
-	
-	// input variables
-	float near;
-	float far;
-	float fov;
-	float aspect;
 
 	// matrix components
 	float range;
@@ -32,6 +25,13 @@ private:
 	float Pz;
 
 public:	
+
+	// input variables
+	float near;
+	float far;
+	float fov;
+	float aspect;
+
 	camera(GLuint*,int,int);
 	~camera();
 

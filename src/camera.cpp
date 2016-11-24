@@ -23,6 +23,7 @@ camera::camera(GLuint *shader_programme,int s_width,int s_height){
 		0.0f, 0.0f, Sz, -1.0f,
 		0.0f, 0.0f, Pz, 0.0f
 	};
+
 	mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2]));
 	mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw);
 	mat4 view_mat = R * T;
@@ -34,7 +35,6 @@ camera::camera(GLuint *shader_programme,int s_width,int s_height){
 	proj_mat_location = glGetUniformLocation (*shader_programme, "proj");
 	glUseProgram (*shader_programme);
 	glUniformMatrix4fv (proj_mat_location, 1, GL_FALSE, proj_mat);
-
 }
 
 void camera::move(float x,float y,float z){

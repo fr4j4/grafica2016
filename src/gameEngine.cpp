@@ -29,6 +29,18 @@ void gameEngine::read_input_keys(){
 		debug("C",DBG_KEY_PRESSED);
 		if (system("CLS")) system("clear");
 	}
+
+	if (!p_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_P)) {
+		p_pressed=true;
+		debug("P",DBG_KEY_PRESSED);
+		pause(!paused);
+	}
+
+	if (p_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_P)) {
+		p_pressed=false;
+		debug("P",DBG_KEY_RELEASED);
+	}
+
 	if(!load_lvl){
 		if(!f1_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F1)){
 			load_lvl=true;
@@ -83,8 +95,8 @@ void gameEngine::read_input_keys(){
 
 void gameEngine::start(){
 	initGL();
-	p=new player();
-	camera *cam=new camera(&shader_programme,g_gl_width,g_gl_height);
+	p=new player("mesh/tinycity.obj");
+	cam=new camera(&shader_programme,g_gl_width,g_gl_height);
 
 	debug("Player created",DBG_DBG);
 	debug("Game engine started",DBG_INFO);
@@ -104,20 +116,18 @@ void gameEngine::start(){
 		
 		glBindVertexArray(p->getVao());
 		glDrawArrays(GL_TRIANGLES,0,p->getnumVertices());
-
-		cam->move(0,0,-elapsed_seconds);
-		//cam->rotate(0,10*elapsed_seconds,0);
-
+		
+		if(!paused){
+			cam->move(0,0,-elapsed_seconds);
+		}
 		read_input_keys();
 
 
 	glfwSwapBuffers (g_window);
+
 	}
-
-
 	glfwTerminate();
 	debug("Game engine stopped",DBG_INFO);
-
 }
 
 
