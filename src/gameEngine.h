@@ -3,17 +3,38 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <string>
+#include <iostream>
+#include <math.h>
 #include "player.h"
 #include "gl_utils.h"
+#include "camera.h"
+#include "tools.h"
+
+#include "maths_funcs.h"
+
+#ifdef __cplusplus__
+  #include <cstdlib>
+#else
+  #include <stdlib.h>
+#endif
+
+#define DBG_DBG 0
+#define DBG_INFO 1
+#define DBG_WARNING 2
+#define DBG_ERROR 3
+#define DBG_MSG 4
+#define DBG_KEY_PRESSED 5
+#define DBG_KEY_RELEASED 6
+
+#define VERTEX_SHADER_FILE "shaders/test_vs.glsl.cpp"
+#define FRAGMENT_SHADER_FILE "shaders/test_fs.glsl.cpp"
+
+using namespace std;
+
+
 
 class gameEngine {
 	private:
-		float cam_pos[3] = {0.0f, 2.0f, 5.0f}; // don't start at zero, or we will be too close
-		float cam_speed = 1.0f; // 1 unit per second
-		float cam_yaw_speed = 10.0f; // 10 degrees per second
-		float cam_yaw = 0.0f; // y-rotation in degrees
-		int view_mat_location=0;
-		int proj_mat_location=0;
 		player *p;
 		int debug_mode=0;
 		bool 
@@ -26,7 +47,6 @@ class gameEngine {
 			f4_pressed=false,
 			f5_pressed=false
 		;
-
 		std::string maps[4]={"map1","map2","map3","map4"};
 
 		void initGL();
@@ -43,7 +63,6 @@ class gameEngine {
 		void debug(std::string message,int kind);
 		void show_main_menu();
 		void load_scenario(std::string scenario_name,player* player);
-		void initCam();
 		void createMenu();
 };
 #endif

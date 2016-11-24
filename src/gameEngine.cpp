@@ -1,32 +1,4 @@
-#include <string>
-#include <iostream>
-#include <GL/glew.h> // include GLEW and new version of GL on Windows
-#include <GL/glut.h> 
-#include "maths_funcs.h"
 #include "gameEngine.h"
-#include "player.h"
-#include "tools.h"
-
-#ifdef __cplusplus__
-  #include <cstdlib>
-#else
-  #include <stdlib.h>
-#endif
-
-#define DBG_DBG 0
-#define DBG_INFO 1
-#define DBG_WARNING 2
-#define DBG_ERROR 3
-#define DBG_MSG 4
-#define DBG_KEY_PRESSED 5
-#define DBG_KEY_RELEASED 6
-
-#define VERTEX_SHADER_FILE "shaders/test_vs.glsl"
-#define FRAGMENT_SHADER_FILE "shaders/test_fs.glsl"
-
-#include <math.h>
-
-using namespace std;
 
 int g_gl_width=0;
 int	g_gl_height=0;
@@ -111,8 +83,13 @@ void gameEngine::read_input_keys(){
 
 void gameEngine::start(){
 	initGL();
-	initCam();
+	p=new player();
+	camera *cam=new camera(&shader_programme,g_gl_width,g_gl_height);
+
+	debug("Player created",DBG_DBG);
+	debug("Game engine started",DBG_INFO);
 	running=true;
+
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
 		static double previous_seconds = glfwGetTime ();
 		double current_seconds = glfwGetTime ();
@@ -125,20 +102,14 @@ void gameEngine::start(){
 		glUseProgram (shader_programme);
 		glfwPollEvents ();
 		
-
 		glBindVertexArray(p->getVao());
 		glDrawArrays(GL_TRIANGLES,0,p->getnumVertices());
 
+		cam->move(0,0,-elapsed_seconds);
+		//cam->rotate(0,10*elapsed_seconds,0);
 
-		cam_pos[2]-=0.25f*elapsed_seconds;
-		
 		read_input_keys();
-	//if (true) {
-		mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2])); // cam translation
-		mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw); // 
-		mat4 view_mat = R * T;
-		glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
-	//}
+
 
 	glfwSwapBuffers (g_window);
 	}
@@ -149,43 +120,6 @@ void gameEngine::start(){
 
 }
 
-void gameEngine::initCam(){
-	p=new player();
-	debug("Player created",DBG_DBG);
-	debug("Game engine started",DBG_INFO);
-
-	#define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
-	// input variables
-	float near = 0.1f; // clipping plane
-	float far = 100.0f; // clipping plane
-	float fov = 67.0f * ONE_DEG_IN_RAD; // convert 67 degrees to radians
-	float aspect = (float)g_gl_width / (float)g_gl_height; // aspect ratio
-	// matrix components
-	float range = tan (fov * 0.5f) * near;
-	float Sx = (2.0f * near) / (range * aspect + range * aspect);
-	float Sy = near / range;
-	float Sz = -(far + near) / (far - near);
-	float Pz = -(2.0f * far * near) / (far - near);
-
-	GLfloat proj_mat[] = {
-		Sx, 0.0f, 0.0f, 0.0f,
-		0.0f, Sy, 0.0f, 0.0f,
-		0.0f, 0.0f, Sz, -1.0f,
-		0.0f, 0.0f, Pz, 0.0f
-	};
-
-	
-	mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2]));
-	mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw);
-	mat4 view_mat = R * T;
-
-	view_mat_location = glGetUniformLocation (shader_programme, "view");
-	glUseProgram (shader_programme);
-	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
-	proj_mat_location = glGetUniformLocation (shader_programme, "proj");
-	glUseProgram (shader_programme);
-	glUniformMatrix4fv (proj_mat_location, 1, GL_FALSE, proj_mat);
-}
 
 void gameEngine::pause(bool p){
 	paused=p;
