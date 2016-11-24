@@ -5,10 +5,10 @@
 #include <string>
 #include <iostream>
 #include <math.h>
-#include "player.h"
 #include "gl_utils.h"
 #include "camera.h"
 #include "tools.h"
+#include "player.h"
 
 #include "maths_funcs.h"
 

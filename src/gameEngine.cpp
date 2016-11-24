@@ -5,7 +5,6 @@ int	g_gl_height=0;
 GLFWwindow* g_window = NULL;
 GLuint shader_programme;
 
-
 gameEngine::gameEngine(){
 	setScreenSize(800,600);
 	debug_mode=1;
