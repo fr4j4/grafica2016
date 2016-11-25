@@ -6,8 +6,8 @@
 #include <GL/glut.h> 
 #include "tools.h"
 #include "maths_funcs.h"
-#include "object.h"
-class player :public object{
+#include "object3D.h"
+class player :public object3D{
 public:
 	player(const char* file_name,GLuint* shader_programme);
 	~player();

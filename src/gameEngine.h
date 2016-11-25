@@ -9,6 +9,8 @@
 #include "camera.h"
 #include "tools.h"
 #include "player.h"
+#include "object3D.h"
+#include <vector>
 
 #include "maths_funcs.h"
 
@@ -33,10 +35,14 @@ using namespace std;
 
 class gameEngine {
 	private:
+
+		vector <object3D *> objs;//guarda los objetos que deben mostrarse en la escena
+		//vector <GLuint>::iterator it;
+
 		camera *cam;
 		player *p;
 		int debug_mode=0,
-			debug_keys=1;
+			debug_keys=0;
 		bool 
 			running=false,
 			paused=false,
@@ -67,5 +73,6 @@ class gameEngine {
 		void show_main_menu();
 		void load_scenario(std::string scenario_name,player* player);
 		void createMenu();
+		void addObj(object3D *);	
 };
 #endif

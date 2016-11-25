@@ -6,7 +6,7 @@
 #include <GL/glut.h> 
 #include "tools.h"
 #include "maths_funcs.h"
-class object{
+class object3D{
 protected:
 	vec3 pos;
 	mat4 M;
@@ -14,8 +14,9 @@ protected:
 	int numvertices;
 	int mat_location=0;
 public:
-	object(const char*,GLuint*);
-	~object();
+	bool enabled;
+	object3D(const char*,GLuint*);
+	~object3D();
 	GLuint getVao();
 	int getnumVertices();
 

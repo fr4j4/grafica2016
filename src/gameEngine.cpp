@@ -7,6 +7,7 @@ GLuint shader_programme;
 
 gameEngine::gameEngine(){
 	setScreenSize(800,600);
+
 	debug_mode=1;
 }
 
@@ -114,14 +115,13 @@ void gameEngine::read_input_controlls_keys(){
 
 void gameEngine::start(){
 	initGL();
-	p=new player("mesh/car/car.obj",&shader_programme);
 	cam=new camera(&shader_programme,g_gl_width,g_gl_height);
-
-	debug("Player created",DBG_DBG);
+	p=new player("mesh/car/car.obj",&shader_programme);
+	addObj(p);
+	addObj(new object3D("mesh/tinycity.obj",&shader_programme));
 	debug("Game engine started",DBG_INFO);
-	running=true;
-
 	
+	running=true;
 
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
 		static double previous_seconds = glfwGetTime ();
@@ -135,10 +135,13 @@ void gameEngine::start(){
 		glUseProgram (shader_programme);
 		glfwPollEvents ();
 		
-		glBindVertexArray(p->getVao());
-		glDrawArrays(GL_TRIANGLES,0,p->getnumVertices());
-		
-
+		//dibujar todos los elementos dentro de la lista de objetos
+		for(int i=0;i<objs.size();i++){
+			if(objs[i]->enabled){
+				glBindVertexArray(objs[i]->getVao());
+				glDrawArrays(GL_TRIANGLES,0,objs[i]->getnumVertices());
+			}
+		}
 
 		read_input_keys();
 		
@@ -214,7 +217,9 @@ void gameEngine::debug(string msg,int kind=0){
 			cout<<prefix<<fg_color<<f_color<<msg<<"\x1B[0m"<<endl;
 		}
 	}
+
 }
+
 void gameEngine::set_debug_mode(int deb){
 	debug_mode=1;
 	if(deb==1){
@@ -244,4 +249,8 @@ void gameEngine::load_scenario(std::string scenario_name,player* player){
 
 	pause(false);
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
+}
+
+void gameEngine::addObj(object3D *obj){
+	objs.push_back(obj);
 }
