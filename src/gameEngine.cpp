@@ -96,6 +96,37 @@ void gameEngine::read_input_keys(){
 
 void gameEngine::read_input_controlls_keys(){
 	string nombre_mapa="";
+	
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_W)) {
+		debug("W",DBG_KEY_PRESSED);
+		cam->move(0.0,0.0,-0.025);
+	}
+
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_S)) {
+		debug("S",DBG_KEY_PRESSED);
+		cam->move(0.0,0.0,0.025);
+	}
+
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_A)) {
+		debug("A",DBG_KEY_PRESSED);
+		cam->move(-0.025,0.0,0.0);
+	}
+
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_D)) {
+		debug("D",DBG_KEY_PRESSED);
+		cam->move(0.025,0.0,0.0);
+	}
+
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_Q)) {
+		debug("Q",DBG_KEY_PRESSED);
+		cam->move(0.0,-0.025,0.0);
+	}
+
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_E)) {
+		debug("E",DBG_KEY_PRESSED);
+		cam->move(0.0,0.025,0.0);
+	}
+
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_UP)) {
 		debug("UP",DBG_KEY_PRESSED);
 		p->move(0.025,0.0,0.0);
