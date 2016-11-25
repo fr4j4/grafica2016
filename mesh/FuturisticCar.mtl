@@ -1,0 +1,88 @@
+# Blender MTL File: 'Futuristic_Car_2.1_blend (copia).blend'
+# Material Count: 7
+
+newmtl Futuristic_Car.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/Futuristic_Car_C.jpg
+map_Bump textures/Futuristic_Car_N.jpg
+map_Ks textures/Futuristic_Car_S.jpg
+refl textures/REF 1.jpg
+
+newmtl Futuristic_Car.001_Futuristic_Car_C.jpg.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/Futuristic_Car_C.jpg
+map_Bump textures/Futuristic_Car_N.jpg
+map_Ks textures/Futuristic_Car_S.jpg
+refl textures/REF 1.jpg
+
+newmtl Futuristic_Car.001_untitled.000
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:/Users/PC/Desktop/car drive/textures/Speed_Car_c.png
+map_Bump textures/Futuristic_Car_N.jpg
+map_Ks textures/Futuristic_Car_S.jpg
+refl textures/REF 1.jpg
+
+newmtl Futuristic_Car_black.001
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd -s 5.000000 5.000000 1.000000 textures/REF 1.jpg
+
+newmtl Futuristic_Car_glass.001
+Ns 749.999996
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.134796
+illum 2
+map_d -s 1.000000 2.000000 1.000000 textures/REF 1.jpg
+refl -s 1.000000 2.000000 1.000000 textures/REF 1.jpg
+
+newmtl box
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures/Futuristic_Car_C.jpg
+
+newmtl box_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
