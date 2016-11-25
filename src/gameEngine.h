@@ -42,6 +42,7 @@ class gameEngine {
 		camera *cam;
 		player *p;
 		object3D *city;
+		object3D *ufo;
 		int debug_mode=0,
 			debug_keys=0;
 		bool 

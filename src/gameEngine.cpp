@@ -147,9 +147,11 @@ void gameEngine::read_input_controlls_keys(){
 
 void gameEngine::start(){
 	initGL();
-	cam=new camera(&shader_programme,g_gl_width,g_gl_height);
-	p=new player("mesh/car/car.obj",&shader_programme);
+	cam =new camera(&shader_programme,g_gl_width,g_gl_height);
+	p   =new player(  "mesh/car/car.obj",&shader_programme);
 	city=new object3D("mesh/tinycity.obj",&shader_programme);
+	ufo =new object3D("mesh/OBJ/Battletoad_default.obj",&shader_programme);
+	addObj(ufo);
 	addObj(p);
 	addObj(city);
 	debug("Game engine started",DBG_INFO);
@@ -178,10 +180,16 @@ void gameEngine::start(){
 		}
 		//objs[1]->move(0.0125,0,0);
 		read_input_keys();
-		
 		if(!paused){
 			read_input_controlls_keys();
 			//cam->move(0,0,-elapsed_seconds);
+			float t=glfwGetTime ()/10.0f;
+			float sin_t=sin(t)/10;
+			printf("%s","t: ");
+			printf("%f\n",t);
+			printf("%s","sin(t): ");
+			printf("%f\n",sin_t);
+			ufo->move(0.0f,0.0f,sin_t);
 		}
 
 
