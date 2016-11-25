@@ -41,6 +41,7 @@ class gameEngine {
 
 		camera *cam;
 		player *p;
+		object3D *city;
 		int debug_mode=0,
 			debug_keys=0;
 		bool 

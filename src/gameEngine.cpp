@@ -53,9 +53,10 @@ void gameEngine::read_input_keys(){
 			debug("F1",DBG_KEY_RELEASED);
 		}
 		if(!f2_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F2)){
-			load_lvl=true;
+			//load_lvl=true;
 			f2_pressed=true;
 			nombre_mapa=maps[1];
+			city->enabled=!city->enabled;
 			debug("F2",DBG_KEY_PRESSED);
 		}
 		if(f2_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F2)){
@@ -105,11 +106,11 @@ void gameEngine::read_input_controlls_keys(){
 	}
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
 		debug("LEFT",DBG_KEY_PRESSED);
-
+		city->move(0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_RIGHT)){
 		debug("RIGHT",DBG_KEY_PRESSED);
-
+		city->move(-0.025,0.0,0.0);
 	}
 }
 
@@ -117,8 +118,9 @@ void gameEngine::start(){
 	initGL();
 	cam=new camera(&shader_programme,g_gl_width,g_gl_height);
 	p=new player("mesh/car/car.obj",&shader_programme);
+	city=new object3D("mesh/tinycity.obj",&shader_programme);
 	addObj(p);
-	addObj(new object3D("mesh/tinycity.obj",&shader_programme));
+	addObj(city);
 	debug("Game engine started",DBG_INFO);
 	
 	running=true;
@@ -138,11 +140,12 @@ void gameEngine::start(){
 		//dibujar todos los elementos dentro de la lista de objetos
 		for(int i=0;i<objs.size();i++){
 			if(objs[i]->enabled){
-				glBindVertexArray(objs[i]->getVao());
-				glDrawArrays(GL_TRIANGLES,0,objs[i]->getnumVertices());
+				objs[i]->render();
+				//glBindVertexArray(objs[i]->getVao());
+				//glDrawArrays(GL_TRIANGLES,0,objs[i]->getnumVertices());
 			}
 		}
-
+		//objs[1]->move(0.0125,0,0);
 		read_input_keys();
 		
 		if(!paused){

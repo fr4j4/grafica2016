@@ -11,6 +11,7 @@ protected:
 	vec3 pos;
 	mat4 M;
 	GLuint vao, vbo;
+	GLuint* shader_programme;
 	int numvertices;
 	int mat_location=0;
 public:
@@ -23,5 +24,6 @@ public:
 	void move(float x,float y,float z);
 	void setPos(float x,float y,float z);
 	void update();
+	void render();
 };
 #endif
