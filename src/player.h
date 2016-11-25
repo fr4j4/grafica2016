@@ -3,7 +3,7 @@
 #include <iostream>
 #include <assert.h>
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
-#include <GL/glut.h> 
+//#include <GL/glut.h> 
 #include "tools.h"
 #include "maths_funcs.h"
 #include "object3D.h"

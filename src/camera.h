@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
-#include <GL/glut.h> 
+//#include <GL/glut.h> 
 #include <math.h>
 #include "maths_funcs.h"
 

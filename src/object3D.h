@@ -3,7 +3,7 @@
 #include <iostream>
 #include <assert.h>
 #include <GL/glew.h>
-#include <GL/glut.h> 
+//#include <GL/glut.h> 
 #include "tools.h"
 #include "maths_funcs.h"
 class object3D{
