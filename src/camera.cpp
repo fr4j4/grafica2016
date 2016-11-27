@@ -3,13 +3,11 @@
 camera::camera(GLuint *shader_programme,int s_width,int s_height){
 	screenWidth=s_width;
 	screenHeight=s_height;
-		
 	// input variables
 	near = 0.1f; // clipping plane
 	far = 100.0f; // clipping plane
 	fov = 67.0f * ONE_DEG_IN_RAD; // convert 67 degrees to radians
 	aspect = (float)screenWidth / (float)screenHeight; // aspect ratio
-
 	// matrix components
 	range = tan (fov * 0.5f) * near;
 	Sx = (2.0f * near) / (range * aspect + range * aspect);

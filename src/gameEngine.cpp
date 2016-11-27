@@ -93,14 +93,36 @@ void gameEngine::read_input_keys(){
 	}
 }
 
+void gameEngine::read_input_controlls_keys(){
+	string nombre_mapa="";
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_UP)) {
+		debug("UP",DBG_KEY_PRESSED);
+		p->move(0.025,0.0,0.0);
+	}
+	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_DOWN)){
+		debug("DOWN",DBG_KEY_PRESSED);
+		p->move(-0.025,0.0,0.0);
+	}
+	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
+		debug("LEFT",DBG_KEY_PRESSED);
+
+	}
+	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_RIGHT)){
+		debug("RIGHT",DBG_KEY_PRESSED);
+
+	}
+}
+
 void gameEngine::start(){
 	initGL();
-	p=new player("mesh/tinycity.obj");
+	p=new player("mesh/car/car.obj",&shader_programme);
 	cam=new camera(&shader_programme,g_gl_width,g_gl_height);
 
 	debug("Player created",DBG_DBG);
 	debug("Game engine started",DBG_INFO);
 	running=true;
+
+	
 
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
 		static double previous_seconds = glfwGetTime ();
@@ -117,9 +139,12 @@ void gameEngine::start(){
 		glBindVertexArray(p->getVao());
 		glDrawArrays(GL_TRIANGLES,0,p->getnumVertices());
 		
+
+
 		read_input_keys();
 		
 		if(!paused){
+			read_input_controlls_keys();
 			//cam->move(0,0,-elapsed_seconds);
 		}
 
@@ -131,7 +156,6 @@ void gameEngine::start(){
 	debug("Game engine stopped",DBG_INFO);
 }
 
-
 void gameEngine::pause(bool p){
 	paused=p;
 	if(p){
@@ -142,7 +166,7 @@ void gameEngine::pause(bool p){
 }
 
 void gameEngine::show_main_menu(){
-	debug("Showing Main Menu",DBG_INFO);
+	debug("Main Menu",DBG_INFO);
 }
 
 void gameEngine::debug(string msg,int kind=0){

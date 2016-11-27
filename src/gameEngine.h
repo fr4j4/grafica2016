@@ -36,7 +36,7 @@ class gameEngine {
 		camera *cam;
 		player *p;
 		int debug_mode=0,
-			debug_keys=0;
+			debug_keys=1;
 		bool 
 			running=false,
 			paused=false,
@@ -59,6 +59,7 @@ class gameEngine {
 
 		void start();
 		void read_input_keys();
+		void read_input_controlls_keys();
 		void setScreenSize(int,int);
 		void pause(bool p);
 		void set_debug_mode(int debug);
