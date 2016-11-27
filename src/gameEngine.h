@@ -41,6 +41,7 @@ class gameEngine {
 
 		camera *cam;
 		player *p;
+		object3D *tinycity;
 		object3D *city;
 		object3D *mountain;
 		object3D *ufo;
