@@ -56,7 +56,7 @@ void gameEngine::read_input_keys(){
 			//load_lvl=true;
 			f2_pressed=true;
 			nombre_mapa=maps[1];
-			city->enabled=!city->enabled;
+			tinycity->enabled=!tinycity->enabled;
 			debug("F2",DBG_KEY_PRESSED);
 		}
 		if(f2_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F2)){
@@ -79,6 +79,7 @@ void gameEngine::read_input_keys(){
 			load_lvl=true;
 			f4_pressed=true;
 			nombre_mapa=maps[3];
+			city->enabled=!city->enabled
 			debug("F4",DBG_KEY_PRESSED);
 		}
 		if(f4_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F4)){
@@ -150,11 +151,13 @@ void gameEngine::start(){
 	initGL();
 	cam =new camera(&shader_programme,g_gl_width,g_gl_height);
 	p   =new player(  "mesh/car/car.obj",&shader_programme);
-	city=new object3D("mesh/tinycity.obj",&shader_programme);
+	tinycity=new object3D("mesh/tinycity.obj",&shader_programme);
+	city=new object3D("mesh/city.obj",&shader_programme);
 	ufo =new object3D("mesh/OBJ/Battletoad_default.obj",&shader_programme);
 	mountain=new object3D("mesh/mountain.obj",&shader_programme);
 	addObj(ufo);
 	addObj(p);
+	addObj(tinycity);
 	addObj(city);
 	addObj(mountain);
 	debug("Game engine started",DBG_INFO);
