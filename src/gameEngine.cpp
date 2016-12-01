@@ -15,7 +15,7 @@ void gameEngine::setScreenSize(int width,int height){
 	g_gl_height=height;
 	g_gl_width=width;
 	debug("Screen size set at "+to_string(width)+"x"+to_string(height)+".",DBG_INFO);
-}	
+}
 
 void gameEngine::read_input_keys(){
 	string nombre_mapa="";
@@ -98,7 +98,7 @@ void gameEngine::read_input_keys(){
 
 void gameEngine::read_input_controlls_keys(){
 	string nombre_mapa="";
-	
+
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_W)) {
 		debug("W",DBG_KEY_PRESSED);
 		cam->move(0.0,0.0,-0.025);
@@ -153,15 +153,17 @@ void gameEngine::start(){
 	p   =new player(  "mesh/car/car.obj",&shader_programme);
 	tinycity=new object3D("mesh/tinycity.obj",&shader_programme);
 	city=new object3D("mesh/city.obj",&shader_programme);
-	ufo =new object3D("mesh/OBJ/Battletoad_default.obj",&shader_programme);
+	ufo =new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);
 	mountain=new object3D("mesh/mountain.obj",&shader_programme);
 	addObj(ufo);
 	addObj(p);
 	addObj(tinycity);
 	addObj(city);
 	addObj(mountain);
+	mountain->enabled=false;
+	city->enabled=false;
 	debug("Game engine started",DBG_INFO);
-	
+
 	running=true;
 
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
@@ -175,7 +177,7 @@ void gameEngine::start(){
 		glViewport (0, 0, g_gl_width, g_gl_height);
 		glUseProgram (shader_programme);
 		glfwPollEvents ();
-		
+
 		//dibujar todos los elementos dentro de la lista de objetos
 		for(int i=0;i<objs.size();i++){
 			if(objs[i]->enabled){
@@ -275,7 +277,7 @@ void gameEngine::set_debug_mode(int deb){
 	}else{
 		debug("Debug mode: DISABLED",DBG_MSG);
 	}
-	debug_mode=deb;	
+	debug_mode=deb;
 }
 
 void gameEngine::initGL(){
