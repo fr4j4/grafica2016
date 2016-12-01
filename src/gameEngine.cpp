@@ -79,7 +79,7 @@ void gameEngine::read_input_keys(){
 			load_lvl=true;
 			f4_pressed=true;
 			nombre_mapa=maps[3];
-			city->enabled=!city->enabled
+			city->enabled=!city->enabled;
 			debug("F4",DBG_KEY_PRESSED);
 		}
 		if(f4_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F4)){
