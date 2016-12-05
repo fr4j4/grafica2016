@@ -21,21 +21,21 @@ GLuint object3D::getVao(){
 }
 
 void object3D::move(float x,float y,float z){
-	pos.v[0]+=x;
-	pos.v[1]+=y;
-	pos.v[2]+=z;
+	pos.v[0]-=x;
+	pos.v[1]-=y;
+	pos.v[2]-=z;
 }
 
 void object3D::setPos(float x,float y,float z){
-	pos.v[0]=x;
-	pos.v[1]=y;
-	pos.v[2]=z;
+	pos.v[0]=-1*x;
+	pos.v[1]=-1*y;
+	pos.v[2]=-1*z;
 }
 
 void object3D::rotate(float x,float y,float z){
-	rotation.v[0]+=x;
-	rotation.v[1]+=y;
-	rotation.v[2]+=z;
+	rotation.v[0]-=x;
+	rotation.v[1]-=y;
+	rotation.v[2]-=z;
 }
 
 void object3D::update(){

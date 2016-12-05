@@ -129,20 +129,20 @@ void gameEngine::read_input_controlls_keys(){
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_UP)) {
 		debug("UP",DBG_KEY_PRESSED);
-		c->move(0.025,0.0,0.0);
+		c->move(-0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_DOWN)){
 		debug("DOWN",DBG_KEY_PRESSED);
-		c->move(-0.025,0.0,0.0);
+		c->move(0.025,0.0,0.0);
 	}
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
 		debug("LEFT",DBG_KEY_PRESSED);
-		ufo->rotate(0.0f,10.0f,0.0f);
+		//ufo->rotate(0.0f,10.0f,0.0f);
 		//city->move(0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_RIGHT)){
 		debug("RIGHT",DBG_KEY_PRESSED);
-		ufo->rotate(0.0f,-10.0f,0.0f);
+		//ufo->rotate(0.0f,-10.0f,0.0f);
 		//city->move(-0.025,0.0,0.0);
 	}
 }
@@ -280,21 +280,56 @@ void gameEngine::load_scenario(std::string scenario_name,player* player){
 void gameEngine::load_scenario(std::string scenario_name){
 	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
-	objs.clear();//quitar objetos a renderizar
+	//recorrer el arreglo y eliminar los objetos uno a uno
+		//	NOT_YET
+	//limpiar el arreglo de objetos
+	objs.clear();
 	
 	xml_document doc;
 	string file=("maps/"+scenario_name+".xml");
 	xml_parse_result result = doc.load_file(file.c_str());
 	string desc(result.description());
 
-	//cout<<file.c_str()<<endl;
 	debug("(read map file result):"+desc,DBG_MSG);
+
+	//recorrer los nodos del archivo XML que sean hijos del nodo raiz (map)
+	cout<<"recorriendo nodos"<<endl;
+	for(xml_node n = doc.first_child().first_child();n;n=n.next_sibling()){
+		string nodeName=n.name();
+		cout<<"Nodo: "<<nodeName<<endl;
+		if(nodeName=="player_car"){
+			//instanciar un objeto car con el modelo especificado en el XML
+			c=new car(string(n.child_value("model")).c_str(),&shader_programme);
+			//agregar ese objeto a la lista de objetos a renderizar
+			addObj(c);
+			//setear el target de la cámara
+			cam->target=c;
+		}else if(nodeName=="object3D"){
+			string objectName=string(n.attribute("name").value());
+			string model=n.child_value("model");
+			vec3 pos=vec3(0.0f,0.0f,0.0f);
+
+			pos.v[0]=atoi(n.child("position").attribute("x").value());
+			pos.v[1]=atoi(n.child("position").attribute("y").value());
+			pos.v[2]=atoi(n.child("position").attribute("z").value());
+
+			cout<<"|->nombre:"<<objectName<<endl;
+			cout<<"|->modelo:"<<model<<endl;
+			cout<<"|->posision:"<<"("<<pos.v[0]<<","<<pos.v[1]<<","<<pos.v[2]<<")"<<endl;
+
+			object3D *obj=new object3D(model.c_str(),&shader_programme);
+			obj->name=objectName;
+			obj->setPos(pos.v[0],pos.v[1],pos.v[2]);
+			addObj(obj);
+		}
+
+
+	}
 
 	//debug(result+"",DBG_INFO);
 
 	/*
 	c   		=new car("mesh/car/sedan.obj",&shader_programme);
->>>>>>> Stashed changes
 	tinycity	=new object3D("mesh/tinycity.obj",&shader_programme);
 	city		=new object3D("mesh/city.obj",&shader_programme);
 	ufo 		=new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);
@@ -308,8 +343,6 @@ void gameEngine::load_scenario(std::string scenario_name){
 	city->enabled=false;
 	cam->target=c;//se establece que la camara debe mirar al auto
 	*/
-	
-
 
 	pause(false);
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
