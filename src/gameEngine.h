@@ -5,12 +5,13 @@
 #include <string>
 #include <iostream>
 #include <math.h>
+#include <vector>
 #include "gl_utils.h"
 #include "camera.h"
 #include "tools.h"
 #include "player.h"
 #include "object3D.h"
-#include <vector>
+#include "car.h"
 
 #include "maths_funcs.h"
 
@@ -40,13 +41,15 @@ class gameEngine {
 		//vector <GLuint>::iterator it;
 
 		camera *cam;
+		car *c;
 		player *p;
 		object3D *tinycity;
 		object3D *city;
 		object3D *mountain;
 		object3D *ufo;
-		int debug_mode=0,
-			debug_keys=0;
+		
+		int debug_mode=0,//imprimir mensajes 
+			debug_keys=0;//imprimir cuando se presionan teclas
 		bool 
 			running=false,
 			paused=false,
@@ -60,10 +63,10 @@ class gameEngine {
 		;
 
 		std::string maps[4]={"map1","map2","map3","map4"};
-
-		void initGL();
+		bool scenario_loaded;
 		void menu();
 	public:
+		void initGL();
 		gameEngine();
 		~gameEngine();
 
@@ -76,6 +79,8 @@ class gameEngine {
 		void debug(std::string message,int kind);
 		void show_main_menu();
 		void load_scenario(std::string scenario_name,player* player);
+		void load_scenario(std::string scenario_name);
+		
 		void createMenu();
 		void addObj(object3D *);	
 };

@@ -6,9 +6,11 @@ GLFWwindow* g_window = NULL;
 GLuint shader_programme;
 
 gameEngine::gameEngine(){
-	setScreenSize(800,600);
-
+	scenario_loaded=false;
 	debug_mode=1;
+	setScreenSize(800,600);
+	this->p=new player("fr4j4");
+	printf("%s\n","----->");
 }
 
 void gameEngine::setScreenSize(int width,int height){
@@ -90,7 +92,7 @@ void gameEngine::read_input_keys(){
 	}if(load_lvl){
 		if(nombre_mapa!=""){
 			debug("loading level...["+nombre_mapa+"]",DBG_INFO);
-			load_scenario(nombre_mapa,NULL);
+			load_scenario(nombre_mapa);
 		}
 		load_lvl=false;
 	}
@@ -101,41 +103,41 @@ void gameEngine::read_input_controlls_keys(){
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_W)) {
 		debug("W",DBG_KEY_PRESSED);
-		cam->move(0.0,0.0,-0.025);
+		//cam->move(0.0,0.0,-0.025);
 	}
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_S)) {
 		debug("S",DBG_KEY_PRESSED);
-		cam->move(0.0,0.0,0.025);
+		//cam->move(0.0,0.0,0.025);
 	}
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_A)) {
 		debug("A",DBG_KEY_PRESSED);
-		cam->move(-0.025,0.0,0.0);
+		//cam->move(-0.025,0.0,0.0);
 	}
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_D)) {
 		debug("D",DBG_KEY_PRESSED);
-		cam->move(0.025,0.0,0.0);
+		//cam->move(0.025,0.0,0.0);
 	}
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_Q)) {
 		debug("Q",DBG_KEY_PRESSED);
-		cam->move(0.0,-0.025,0.0);
+		//cam->move(0.0,-0.025,0.0);
 	}
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_E)) {
 		debug("E",DBG_KEY_PRESSED);
-		cam->move(0.0,0.025,0.0);
+		//cam->move(0.0,0.025,0.0);
 	}
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_UP)) {
 		debug("UP",DBG_KEY_PRESSED);
-		p->move(0.025,0.0,0.0);
+		c->move(0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_DOWN)){
 		debug("DOWN",DBG_KEY_PRESSED);
-		p->move(-0.025,0.0,0.0);
+		c->move(-0.025,0.0,0.0);
 	}
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
 		debug("LEFT",DBG_KEY_PRESSED);
@@ -150,26 +152,10 @@ void gameEngine::read_input_controlls_keys(){
 }
 
 void gameEngine::start(){
-	initGL();
-	cam =new camera(&shader_programme,g_gl_width,g_gl_height);
-	p   =new player(  "mesh/car/car.obj",&shader_programme);
-	tinycity=new object3D("mesh/tinycity.obj",&shader_programme);
-	city=new object3D("mesh/city.obj",&shader_programme);
-	ufo =new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);
-	mountain=new object3D("mesh/mountain.obj",&shader_programme);
-	addObj(ufo);
-	addObj(p);
-	addObj(tinycity);
-	addObj(city);
-	addObj(mountain);
-	mountain->enabled=false;
-	city->enabled=false;
-
-	//cam->target=p;//se establece que la camara debe mirar al auto
+	
 	debug("Game engine started",DBG_INFO);
-
 	running=true;
-	ufo->setPos(2.0f,0.0f,0.0f);
+
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
 		static double previous_seconds = glfwGetTime ();
 		double current_seconds = glfwGetTime ();
@@ -182,22 +168,23 @@ void gameEngine::start(){
 		glUseProgram (shader_programme);
 		glfwPollEvents ();
 
-		for(int i=0;i<objs.size();i++){
-			if(objs[i]->enabled){
-				objs[i]->update();
-				objs[i]->render();
+		if(scenario_loaded){
+			for(int i=0;i<objs.size();i++){
+				if(objs[i]->enabled){
+					objs[i]->update();
+					objs[i]->render();
+				}
 			}
-		}
 
-		read_input_keys();
-		
-		if(!paused){
-			cam->update();//actualizar la cámara
-			read_input_controlls_keys();
-			float t=glfwGetTime ()/10.0f;
-			float sin_t=sin(t)/10;
-		}
-
+			read_input_keys();
+			
+			if(!paused){
+				cam->update();//actualizar la cámara
+				read_input_controlls_keys();
+				float t=glfwGetTime ()/10.0f;
+				float sin_t=sin(t)/10;
+			}
+		}	
 		glfwSwapBuffers (g_window);
 	}
 	glfwTerminate();
@@ -287,14 +274,33 @@ void gameEngine::initGL(){
 	glClearColor (0.2, 0.2, 0.2, 1.0); // grey background to help spot mistakes
 	glViewport (0, 0, g_gl_width, g_gl_height);
 	shader_programme = create_programme_from_files (VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
+	cam =new camera(&shader_programme,g_gl_width,g_gl_height);
 }
 
 void gameEngine::load_scenario(std::string scenario_name,player* player){
+	printf("%s\n","load_1");
+}
+
+void gameEngine::load_scenario(std::string scenario_name){
 	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
-
+	objs.clear();//quitar objetos a renderizar
+	c   		=new car("mesh/car/car.obj",&shader_programme);
+	tinycity	=new object3D("mesh/tinycity.obj",&shader_programme);
+	city		=new object3D("mesh/city.obj",&shader_programme);
+	ufo 		=new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);
+	mountain	=new object3D("mesh/mountain.obj",&shader_programme);
+	mountain->enabled=false;
+	addObj(ufo);
+	addObj(c);
+	addObj(tinycity);
+	addObj(city);
+	addObj(mountain);
+	city->enabled=false;
+	cam->target=c;//se establece que la camara debe mirar al auto
 	pause(false);
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
+	scenario_loaded=true;
 }
 
 void gameEngine::addObj(object3D *obj){

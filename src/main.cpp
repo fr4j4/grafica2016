@@ -12,7 +12,9 @@ int main(int argc, char const *argv[]){
 	
 	gameEngine *ge=new gameEngine();
 	ge->set_debug_mode(debug_mode);
-	ge->setScreenSize(1034,764);
+	ge->setScreenSize(1024,764);
+	ge->initGL();
+	ge->load_scenario("hola");
 	ge->start();
 	
 	return 0;

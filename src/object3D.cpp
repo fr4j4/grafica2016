@@ -30,7 +30,6 @@ void object3D::setPos(float x,float y,float z){
 	pos.v[0]=x;
 	pos.v[1]=y;
 	pos.v[2]=z;
-
 }
 
 void object3D::rotate(float x,float y,float z){
@@ -40,23 +39,12 @@ void object3D::rotate(float x,float y,float z){
 }
 
 void object3D::update(){
-	M=identity_mat4();//reiniciar la matriz
-	/*glUseProgram (*shader_programme);
-	mat4 R,T;
-	R = rotate_y_deg (identity_mat4 (), rotation.v[1]);
-	T = translate (identity_mat4 (), vec3 (-pos.v[0], -pos.v[1], -pos.v[2])); // cam translation
-	//R = rotate_y_deg (identity_mat4 (), -rotation.v[1]);
-	//R = rotate_z_deg (identity_mat4 (), -rotation.v[2]);  
-	M=R*T;
-	//mat4 view_mat = R * T;
-	//glUniformMatrix4fv (mat_location, 1, GL_FALSE, M.m);*/
+	M =	identity_mat4();//reiniciar la matriz
 	M = rotate_y_deg (M, rotation.v[1]);
 	M = translate (M, vec3 (-pos.v[0], -pos.v[1], -pos.v[2])); 
 
 }
 void object3D::render(){
-	//
-
 	glUniformMatrix4fv (mat_location, 1, GL_FALSE, M.m);
 	glBindVertexArray(getVao());
 	glDrawArrays(GL_TRIANGLES,0,getnumVertices());
