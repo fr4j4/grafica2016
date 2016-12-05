@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <map name="Test map 1.0" author="fr4j4">
-	<player name="PLAYER_1"></player>
+	<player name="PLAYER_1">
+	</player>
 	<player_car>
 		<model>mesh/sedan.obj</model>
 		<position x="0" y="0" z="0"></position>
@@ -15,5 +16,7 @@
 		<model>mesh/OBJ/Battletoad_default.obj</model>
 		<position x="0" y="2" z="0" ></position>
 	</object3D>
+
+	
 
 </map>

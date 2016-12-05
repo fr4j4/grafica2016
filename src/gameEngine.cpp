@@ -277,9 +277,11 @@ void gameEngine::load_scenario(std::string scenario_name,player* player){
 	printf("%s\n","load_1");
 }
 
+
+//funcion encargada de leer el archivo XML y generar el mapa
 void gameEngine::load_scenario(std::string scenario_name){
-	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
+	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	//recorrer el arreglo y eliminar los objetos uno a uno
 		//	NOT_YET
 	//limpiar el arreglo de objetos
@@ -344,9 +346,9 @@ void gameEngine::load_scenario(std::string scenario_name){
 	cam->target=c;//se establece que la camara debe mirar al auto
 	*/
 
-	pause(false);
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
 	scenario_loaded=true;
+	pause(false);
 }
 
 void gameEngine::addObj(object3D *obj){
