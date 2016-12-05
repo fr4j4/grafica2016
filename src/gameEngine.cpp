@@ -139,11 +139,13 @@ void gameEngine::read_input_controlls_keys(){
 	}
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
 		debug("LEFT",DBG_KEY_PRESSED);
-		city->move(0.025,0.0,0.0);
+		ufo->rotate(0.0f,10.0f,0.0f);
+		//city->move(0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_RIGHT)){
 		debug("RIGHT",DBG_KEY_PRESSED);
-		city->move(-0.025,0.0,0.0);
+		ufo->rotate(0.0f,-10.0f,0.0f);
+		//city->move(-0.025,0.0,0.0);
 	}
 }
 
@@ -162,10 +164,12 @@ void gameEngine::start(){
 	addObj(mountain);
 	mountain->enabled=false;
 	city->enabled=false;
+
+	cam->target=p;
 	debug("Game engine started",DBG_INFO);
 
 	running=true;
-
+	ufo->setPos(2.0f,0.0f,0.0f);
 	while(running&&!glfwWindowShouldClose (g_window)){//bucle principal del motor de juegos
 		static double previous_seconds = glfwGetTime ();
 		double current_seconds = glfwGetTime ();
@@ -178,31 +182,23 @@ void gameEngine::start(){
 		glUseProgram (shader_programme);
 		glfwPollEvents ();
 
-		//dibujar todos los elementos dentro de la lista de objetos
 		for(int i=0;i<objs.size();i++){
 			if(objs[i]->enabled){
+				objs[i]->update();
 				objs[i]->render();
-				//glBindVertexArray(objs[i]->getVao());
-				//glDrawArrays(GL_TRIANGLES,0,objs[i]->getnumVertices());
 			}
 		}
-		//objs[1]->move(0.0125,0,0);
+
 		read_input_keys();
+		
 		if(!paused){
+			cam->update();//actualizar la cámara
 			read_input_controlls_keys();
-			//cam->move(0,0,-elapsed_seconds);
 			float t=glfwGetTime ()/10.0f;
 			float sin_t=sin(t)/10;
-			printf("%s","t: ");
-			printf("%f\n",t);
-			printf("%s","sin(t): ");
-			printf("%f\n",sin_t);
-			ufo->move(0.0f,0.0f,sin_t);
 		}
 
-
-	glfwSwapBuffers (g_window);
-
+		glfwSwapBuffers (g_window);
 	}
 	glfwTerminate();
 	debug("Game engine stopped",DBG_INFO);

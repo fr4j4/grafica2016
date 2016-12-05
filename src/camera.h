@@ -1,9 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
-//#include <GL/glut.h> 
 #include <math.h>
 #include "maths_funcs.h"
+#include "object3D.h"
 
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
 
@@ -26,7 +26,7 @@ private:
 	float Pz;
 
 public:	
-
+	object3D *target;
 	// input variables
 	float near;
 	float far;

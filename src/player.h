@@ -11,5 +11,6 @@ class player :public object3D{
 public:
 	player(const char* file_name,GLuint* shader_programme);
 	~player();
+	
 };
 #endif

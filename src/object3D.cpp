@@ -3,6 +3,7 @@
 object3D::object3D(const char* file_name,GLuint* shader_programme){
 	this-> shader_programme=shader_programme;
 	pos=vec3(0.0f,0.0f,0.0f);
+	rotation=vec3(0.0f,0.0f,0.0f);
 	assert(load_mesh(file_name, &vao, &numvertices));
 	M=identity_mat4 ();
 	glUseProgram (*shader_programme);
@@ -23,25 +24,39 @@ void object3D::move(float x,float y,float z){
 	pos.v[0]+=x;
 	pos.v[1]+=y;
 	pos.v[2]+=z;
-	update();
 }
 
 void object3D::setPos(float x,float y,float z){
 	pos.v[0]=x;
 	pos.v[1]=y;
 	pos.v[2]=z;
-	update();
+
+}
+
+void object3D::rotate(float x,float y,float z){
+	rotation.v[0]+=x;
+	rotation.v[1]+=y;
+	rotation.v[2]+=z;
 }
 
 void object3D::update(){
-	glUseProgram (*shader_programme);
-	mat4 T = translate (identity_mat4 (), vec3 (-pos.v[0], -pos.v[1], -pos.v[2])); // cam translation
-	//mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw); // 
+	M=identity_mat4();//reiniciar la matriz
+	/*glUseProgram (*shader_programme);
+	mat4 R,T;
+	R = rotate_y_deg (identity_mat4 (), rotation.v[1]);
+	T = translate (identity_mat4 (), vec3 (-pos.v[0], -pos.v[1], -pos.v[2])); // cam translation
+	//R = rotate_y_deg (identity_mat4 (), -rotation.v[1]);
+	//R = rotate_z_deg (identity_mat4 (), -rotation.v[2]);  
+	M=R*T;
 	//mat4 view_mat = R * T;
-	M=T;
-	//glUniformMatrix4fv (mat_location, 1, GL_FALSE, M.m);
+	//glUniformMatrix4fv (mat_location, 1, GL_FALSE, M.m);*/
+	M = rotate_y_deg (M, rotation.v[1]);
+	M = translate (M, vec3 (-pos.v[0], -pos.v[1], -pos.v[2])); 
+
 }
 void object3D::render(){
+	//
+
 	glUniformMatrix4fv (mat_location, 1, GL_FALSE, M.m);
 	glBindVertexArray(getVao());
 	glDrawArrays(GL_TRIANGLES,0,getnumVertices());
