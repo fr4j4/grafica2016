@@ -165,7 +165,7 @@ void gameEngine::start(){
 	mountain->enabled=false;
 	city->enabled=false;
 
-	cam->target=p;
+	//cam->target=p;//se establece que la camara debe mirar al auto
 	debug("Game engine started",DBG_INFO);
 
 	running=true;

@@ -40,19 +40,16 @@ void camera::move(float x,float y,float z){
 	cam_pos[0]+=x;
 	cam_pos[1]+=y;
 	cam_pos[2]+=z;
-	//update();
 }
 
 void camera::setPos(float x,float y,float z){
 	cam_pos[0]=x;
 	cam_pos[1]=y;
 	cam_pos[2]=z;
-	//update();
 }
 
 void camera::rotate(float x,float y,float z){
 	cam_yaw-=y;
-	//update();
 }
 
 void camera::update(){
@@ -60,9 +57,8 @@ void camera::update(){
 	//mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw); // 
 	//mat4 view_mat = R * T;
 	mat4 view_mat =T;
-	//printf("%s\n","cam_update");
 	if(target!=NULL){
-		view_mat=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos*-1git add ..0f,vec3(0.0f,1.0f,0.0f));
+		view_mat=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
 	}
 	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
 }
