@@ -281,7 +281,6 @@ void gameEngine::load_scenario(std::string scenario_name,player* player){
 //funcion encargada de leer el archivo XML y generar el mapa
 void gameEngine::load_scenario(std::string scenario_name){
 	pause(true);
-	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	//recorrer el arreglo y eliminar los objetos uno a uno
 		//	NOT_YET
 	//limpiar el arreglo de objetos
@@ -290,44 +289,44 @@ void gameEngine::load_scenario(std::string scenario_name){
 	xml_document doc;
 	string file=("maps/"+scenario_name+".xml");
 	xml_parse_result result = doc.load_file(file.c_str());
-	string desc(result.description());
 
-	debug("(read map file result):"+desc,DBG_MSG);
+	if((bool)result){
+		debug("Archivo de mapa encontrado. Cargando mapa...",DBG_INFO);
+		//recorrer los nodos del archivo XML que sean hijos del nodo raiz (map)
+		cout<<"recorriendo nodos"<<endl;
+		for(xml_node n = doc.first_child().first_child();n;n=n.next_sibling()){
+			string nodeName=n.name();
+			cout<<"Nodo: "<<nodeName<<endl;
+			if(nodeName=="player_car"){
+				//instanciar un objeto car con el modelo especificado en el XML
+				c=new car(string(n.child_value("model")).c_str(),&shader_programme);
+				//agregar ese objeto a la lista de objetos a renderizar
+				addObj(c);
+				//setear el target de la cámara
+				cam->target=c;
+			}else if(nodeName=="object3D"){
+				string objectName=string(n.attribute("name").value());
+				string model=n.child_value("model");
+				vec3 pos=vec3(0.0f,0.0f,0.0f);
 
-	//recorrer los nodos del archivo XML que sean hijos del nodo raiz (map)
-	cout<<"recorriendo nodos"<<endl;
-	for(xml_node n = doc.first_child().first_child();n;n=n.next_sibling()){
-		string nodeName=n.name();
-		cout<<"Nodo: "<<nodeName<<endl;
-		if(nodeName=="player_car"){
-			//instanciar un objeto car con el modelo especificado en el XML
-			c=new car(string(n.child_value("model")).c_str(),&shader_programme);
-			//agregar ese objeto a la lista de objetos a renderizar
-			addObj(c);
-			//setear el target de la cámara
-			cam->target=c;
-		}else if(nodeName=="object3D"){
-			string objectName=string(n.attribute("name").value());
-			string model=n.child_value("model");
-			vec3 pos=vec3(0.0f,0.0f,0.0f);
+				pos.v[0]=atoi(n.child("position").attribute("x").value());
+				pos.v[1]=atoi(n.child("position").attribute("y").value());
+				pos.v[2]=atoi(n.child("position").attribute("z").value());
 
-			pos.v[0]=atoi(n.child("position").attribute("x").value());
-			pos.v[1]=atoi(n.child("position").attribute("y").value());
-			pos.v[2]=atoi(n.child("position").attribute("z").value());
+				cout<<"|->nombre:"<<objectName<<endl;
+				cout<<"|->modelo:"<<model<<endl;
+				cout<<"|->posision:"<<"("<<pos.v[0]<<","<<pos.v[1]<<","<<pos.v[2]<<")"<<endl;
 
-			cout<<"|->nombre:"<<objectName<<endl;
-			cout<<"|->modelo:"<<model<<endl;
-			cout<<"|->posision:"<<"("<<pos.v[0]<<","<<pos.v[1]<<","<<pos.v[2]<<")"<<endl;
+				object3D *obj=new object3D(model.c_str(),&shader_programme);
+				obj->name=objectName;
+				obj->setPos(pos.v[0],pos.v[1],pos.v[2]);
+				addObj(obj);
+			}
 
-			object3D *obj=new object3D(model.c_str(),&shader_programme);
-			obj->name=objectName;
-			obj->setPos(pos.v[0],pos.v[1],pos.v[2]);
-			addObj(obj);
 		}
-
-
+	}else{
+		debug("Error!. El archivo de mapa solicitado no ha sido encontrado",DBG_ERROR);
 	}
-
 	//debug(result+"",DBG_INFO);
 
 	/*
