@@ -7,7 +7,7 @@ object3D::object3D(const char* file_name,GLuint* shader_programme){
 	assert(load_mesh(file_name, &vao, &numvertices));
 	M=identity_mat4 ();
 	glUseProgram (*shader_programme);
-	mat_location = glGetUniformLocation (*shader_programme, "obj");
+	mat_location = glGetUniformLocation (*shader_programme, "model");
 	update();
 	enabled=true;
 }
@@ -41,7 +41,7 @@ void object3D::rotate(float x,float y,float z){
 void object3D::update(){
 	M =	identity_mat4();//reiniciar la matriz
 	M = rotate_y_deg (M, rotation.v[1]);
-	M = translate (M, vec3 (-pos.v[0], -pos.v[1], -pos.v[2])); 
+	M = translate (M, vec3 (-pos.v[0], -pos.v[1], -pos.v[2]));
 
 }
 void object3D::render(){
