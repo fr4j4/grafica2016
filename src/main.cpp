@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]){
 	ge->set_debug_mode(debug_mode);
 	ge->setScreenSize(1024,764);
 	ge->initGL();
-	ge->load_scenario("hola");
+	ge->load_scenario("map1");
 	ge->start();
 	
 	return 0;

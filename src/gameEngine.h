@@ -6,6 +6,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include "maths_funcs.h"
 #include "gl_utils.h"
 #include "camera.h"
 #include "tools.h"
@@ -13,7 +14,7 @@
 #include "object3D.h"
 #include "car.h"
 
-#include "maths_funcs.h"
+#include "pugixml.hpp"
 
 #ifdef __cplusplus__
   #include <cstdlib>
@@ -32,6 +33,7 @@
 #define VERTEX_SHADER_FILE "shaders/test_vs.glsl.cpp"
 #define FRAGMENT_SHADER_FILE "shaders/test_fs.glsl.cpp"
 
+using namespace pugi;
 using namespace std;
 
 class gameEngine {

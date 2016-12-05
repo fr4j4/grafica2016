@@ -1,5 +1,4 @@
 #include "gameEngine.h"
-
 int g_gl_width=0;
 int	g_gl_height=0;
 GLFWwindow* g_window = NULL;
@@ -55,10 +54,9 @@ void gameEngine::read_input_keys(){
 			debug("F1",DBG_KEY_RELEASED);
 		}
 		if(!f2_pressed&&GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_F2)){
-			//load_lvl=true;
+			load_lvl=true;
 			f2_pressed=true;
 			nombre_mapa=maps[1];
-			tinycity->enabled=!tinycity->enabled;
 			debug("F2",DBG_KEY_PRESSED);
 		}
 		if(f2_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F2)){
@@ -70,7 +68,6 @@ void gameEngine::read_input_keys(){
 			load_lvl=true;
 			f3_pressed=true;
 			nombre_mapa=maps[2];
-			mountain->enabled=!mountain->enabled;
 			debug("F3",DBG_KEY_PRESSED);
 		}
 		if(f3_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F3)){
@@ -81,7 +78,6 @@ void gameEngine::read_input_keys(){
 			load_lvl=true;
 			f4_pressed=true;
 			nombre_mapa=maps[3];
-			city->enabled=!city->enabled;
 			debug("F4",DBG_KEY_PRESSED);
 		}
 		if(f4_pressed&&GLFW_RELEASE == glfwGetKey (g_window, GLFW_KEY_F4)){
@@ -285,7 +281,23 @@ void gameEngine::load_scenario(std::string scenario_name){
 	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
 	objs.clear();//quitar objetos a renderizar
+<<<<<<< Updated upstream
 	c   		=new car("mesh/sedan.obj",&shader_programme);
+=======
+	
+	xml_document doc;
+	string file=("maps/"+scenario_name+".xml");
+	xml_parse_result result = doc.load_file(file.c_str());
+	string desc(result.description());
+
+	//cout<<file.c_str()<<endl;
+	debug("(read map file result):"+desc,DBG_MSG);
+
+	//debug(result+"",DBG_INFO);
+
+	/*
+	c   		=new car("mesh/car/car.obj",&shader_programme);
+>>>>>>> Stashed changes
 	tinycity	=new object3D("mesh/tinycity.obj",&shader_programme);
 	city		=new object3D("mesh/city.obj",&shader_programme);
 	ufo 		=new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);
@@ -298,6 +310,10 @@ void gameEngine::load_scenario(std::string scenario_name){
 	addObj(mountain);
 	city->enabled=false;
 	cam->target=c;//se establece que la camara debe mirar al auto
+	*/
+	
+
+
 	pause(false);
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
 	scenario_loaded=true;
