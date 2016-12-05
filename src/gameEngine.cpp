@@ -281,9 +281,6 @@ void gameEngine::load_scenario(std::string scenario_name){
 	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
 	objs.clear();//quitar objetos a renderizar
-<<<<<<< Updated upstream
-	c   		=new car("mesh/sedan.obj",&shader_programme);
-=======
 	
 	xml_document doc;
 	string file=("maps/"+scenario_name+".xml");
@@ -296,7 +293,7 @@ void gameEngine::load_scenario(std::string scenario_name){
 	//debug(result+"",DBG_INFO);
 
 	/*
-	c   		=new car("mesh/car/car.obj",&shader_programme);
+	c   		=new car("mesh/car/sedan.obj",&shader_programme);
 >>>>>>> Stashed changes
 	tinycity	=new object3D("mesh/tinycity.obj",&shader_programme);
 	city		=new object3D("mesh/city.obj",&shader_programme);
