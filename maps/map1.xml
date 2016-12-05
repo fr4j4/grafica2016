@@ -1,8 +1,7 @@
-<map>
-	<player>
-		<posx>0</posx>
-		<posy>1</posy>
-		<posz>2</posz>
-		<life>100</life>
-	</player>
+<?xml version="1.0"?>
+<map name="Test map 1.0">
+	<player name="PLAYER_1"></player>
+	<player_car>
+		<position x="1" y="2" z="3"></position>
+	</player_car>
 </map>
