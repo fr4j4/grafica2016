@@ -152,7 +152,7 @@ void gameEngine::read_input_controlls_keys(){
 }
 
 void gameEngine::start(){
-	
+
 	debug("Game engine started",DBG_INFO);
 	running=true;
 
@@ -177,14 +177,14 @@ void gameEngine::start(){
 			}
 
 			read_input_keys();
-			
+
 			if(!paused){
 				cam->update();//actualizar la cámara
 				read_input_controlls_keys();
 				float t=glfwGetTime ()/10.0f;
 				float sin_t=sin(t)/10;
 			}
-		}	
+		}
 		glfwSwapBuffers (g_window);
 	}
 	glfwTerminate();
@@ -285,7 +285,7 @@ void gameEngine::load_scenario(std::string scenario_name){
 	debug("Loading scenario..."+scenario_name+"...",DBG_INFO);
 	pause(true);
 	objs.clear();//quitar objetos a renderizar
-	c   		=new car("mesh/car/car.obj",&shader_programme);
+	c   		=new car("mesh/sedan.obj",&shader_programme);
 	tinycity	=new object3D("mesh/tinycity.obj",&shader_programme);
 	city		=new object3D("mesh/city.obj",&shader_programme);
 	ufo 		=new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);

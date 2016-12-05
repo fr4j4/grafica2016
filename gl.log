@@ -1,6 +1,6 @@
-GL_LOG_FILE log. local time Mon Dec  5 16:30:51 2016
+GL_LOG_FILE log. local time Mon Dec  5 16:58:53 2016
 
-starting GLFW 3.2.1 X11 GLX EGL clock_gettime /dev/js Xf86vm sharedrenderer: Gallium 0.4 on AMD ARUBA (DRM 2.46.0 / 4.8.0-28-generic, LLVM 3.8.1)
+starting GLFW 3.1.1 X11 GLX glXGetProcAddress clock_gettime /dev/js sharedrenderer: Mesa DRI Intel(R) HD Graphics 520 (Skylake GT2) 
 version: 3.0 Mesa 12.0.3
 creating shader from shaders/test_vs.glsl.cpp...
 shader compiled. index 1
