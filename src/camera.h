@@ -39,6 +39,6 @@ public:
 	void setPos(float,float,float);
 	void move(float,float,float);
 	void rotate(float,float,float);
-	void update();
+	void update(float);
 };
 #endif

@@ -175,7 +175,7 @@ void gameEngine::start(){
 			read_input_keys();
 
 			if(!paused){
-				cam->update();//actualizar la cámara
+				cam->update(elapsed_seconds);//actualizar la cámara
 				read_input_controlls_keys();
 				float t=glfwGetTime ()/10.0f;
 				float sin_t=sin(t)/10;

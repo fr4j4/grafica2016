@@ -8,7 +8,7 @@ in vec3 vertex_position;
 in vec3 vertex_normal;
 in vec2 texture_coord;
 
-uniform mat4 view, proj, model,obj;
+uniform mat4 view, proj, model;
 
 out vec3 normal;
 out vec3 light;

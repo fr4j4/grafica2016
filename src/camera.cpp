@@ -52,13 +52,23 @@ void camera::rotate(float x,float y,float z){
 	cam_yaw-=y;
 }
 
-void camera::update(){
+void camera::update(float t){
 	mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2])); // cam translation
 	//mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw); // 
 	//mat4 view_mat = R * T;
 	mat4 view_mat =T;
 	if(target!=NULL){
+		cam_pos[2]=target->pos.v[2];
+		view_mat=translate(view_mat,vec3(0.0f,0.0f,cam_pos[2]+target->pos.v[2]*t));
 		view_mat=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
+		if(cam_pos[0]+target->pos.v[0]>4){
+			cam_pos[0]-=4*t;
+		}
+		
+		if(cam_pos[0] + target->pos.v[0] <4 ){
+			cam_pos[0]+=4*t;
+		}
+		printf("cam_pos(%f,%f,%f) - target_pos(%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2]);
 	}
 	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
 }
