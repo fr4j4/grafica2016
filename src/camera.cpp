@@ -52,27 +52,29 @@ void camera::rotate(float x,float y,float z){
 	cam_yaw-=y;
 }
 
-void camera::update(float t){
-	mat4 T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2])); // cam translation
-	//mat4 R = rotate_y_deg (identity_mat4 (), -cam_yaw); // 
-	//mat4 view_mat = R * T;
-	mat4 view_mat =T;
+void camera::update(){
+	mat4 T= identity_mat4();
 	if(target!=NULL){
-		//cam_pos[2]=target->pos.v[2];
-		//view_mat=translate(view_mat,vec3(0.0f,0.0f,cam_pos[2]+target->pos.v[2]*t));
-		//printf("ANTES:cam_pos(%f,%f,%f) - target_pos(%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2]);
-		float r=sqrt(get_squared_dist(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos));
-		//r=3.0f;
+		
+		float r=sqrt(get_squared_dist(target->pos,vec3(cam_pos[0],cam_pos[1],cam_pos[2])));
+		
+		//r=2.0f;
+
+		float new_x=r*cos((target->rotation.y())*ONE_DEG_IN_RAD);
+		float new_z=r*-sin((target->rotation.y())*ONE_DEG_IN_RAD);
+		
+		vec3 newpos=vec3(new_x,cam_pos[1],new_z);
+		newpos=normalise(newpos);
+		setPos(newpos.x(),cam_pos[1],newpos.z());
+
+
+
+		T=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),
+			target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
 		printf("R:%f\n",r);
-		T=identity_mat4();
-		float new_x=r*cos((target->rotation.v[1])*ONE_DEG_IN_RAD);
-		float new_z=-r*sin((target->rotation.v[1])*ONE_DEG_IN_RAD);
-		//setPos(new_x,cam_pos[1],new_z);
-		view_mat=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
-		//printf("DESPUES:cam_pos(%f,%f,%f) - target_pos(%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2]);
-		printf("cam_pos (%f,%f,%f) - target_rot (%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->rotation.v[0],target->rotation.v[1],target->rotation.v[2]);
-		//printf("R:%f\n",r );
-		//getchar();
+		printf("cam_pos (%f,%f,%f) - target_rot (%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->rotation.v[0],target->rotation.v[1],target->rotation.v[2]);	
+	}else{
+		T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2])); // cam translation
 	}
-	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
+	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, T.m);
 }

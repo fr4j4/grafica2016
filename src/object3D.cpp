@@ -44,9 +44,13 @@ void object3D::setPos(float x,float y,float z){
 }
 
 void object3D::rotate(float x,float y,float z){
+	//aplico el modulo para que los valores sean entre -360 y 360
 	rotation.v[0]-=x;
+		rotation.v[0]=fmod(rotation.v[0],360.0f);
 	rotation.v[1]-=y;
+		rotation.v[1]=fmod(rotation.v[1],360.0f);
 	rotation.v[2]-=z;
+		rotation.v[2]=fmod(rotation.v[2],360.0f);
 }
 
 void object3D::update(){

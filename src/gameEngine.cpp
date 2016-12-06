@@ -137,13 +137,13 @@ void gameEngine::read_input_controlls_keys(){
 	}
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
 		debug("LEFT",DBG_KEY_PRESSED);
-		c->rotate(0.0f,-5.0f,0.0f);
+		c->rotate(0.0f,-1.0f,0.0f);
 		//ufo->rotate(0.0f,10.0f,0.0f);
 		//city->move(0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_RIGHT)){
 		debug("RIGHT",DBG_KEY_PRESSED);
-		c->rotate(0.0f,+5.0f,0.0f);
+		c->rotate(0.0f,+1.0f,0.0f);
 		//ufo->rotate(0.0f,-10.0f,0.0f);
 		//city->move(-0.025,0.0,0.0);
 	}
@@ -175,12 +175,10 @@ void gameEngine::start(){
 			}
 			read_input_keys();
 			if(!paused){
-				cam->update(elapsed_seconds);//actualizar la cámara
 				read_input_controlls_keys();
-				float t=glfwGetTime ()/10.0f;
-				float sin_t=sin(t)/10;
 			}
 		}
+		cam->update();//actualizar la cámara
 		glfwSwapBuffers (g_window);
 	}
 	glfwTerminate();
@@ -200,6 +198,7 @@ void gameEngine::show_main_menu(){
 	debug("Main Menu",DBG_INFO);
 }
 
+//funcion que imprime mensajes con colores
 void gameEngine::debug(string msg,int kind=0){
 	string fg_color="",f_color="\x1B[36m";
 	string prefix=" [\x1B[36m--DEBUG\x1B[0m] ";
@@ -328,28 +327,10 @@ void gameEngine::load_scenario(std::string scenario_name){
 				pos.v[2]=atoi(n.child("position").attribute("z").value());
 				cam->setPos(pos.v[0],pos.v[1],pos.v[2]);
 			}
-
 		}
 	}else{
 		debug("Error!. El archivo de mapa solicitado no ha sido encontrado",DBG_ERROR);
 	}
-	//debug(result+"",DBG_INFO);
-
-	/*
-	c   		=new car("mesh/car/sedan.obj",&shader_programme);
-	tinycity	=new object3D("mesh/tinycity.obj",&shader_programme);
-	city		=new object3D("mesh/city.obj",&shader_programme);
-	ufo 		=new object3D("mesh/OBJ/Battletoad.obj",&shader_programme);
-	mountain	=new object3D("mesh/mountain.obj",&shader_programme);
-	mountain->enabled=false;
-	addObj(ufo);
-	addObj(c);
-	addObj(tinycity);
-	addObj(city);
-	addObj(mountain);
-	city->enabled=false;
-	cam->target=c;//se establece que la camara debe mirar al auto
-	*/
 
 	debug("Scenario loaded!"+scenario_name+"...",DBG_INFO);
 	scenario_loaded=true;

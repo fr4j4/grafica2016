@@ -30,6 +30,8 @@ struct vec2 {
 	vec2 ();
 	vec2 (float x, float y);
 	float v[2];
+	float x();
+	float y();
 };
 
 struct vec3 {
@@ -62,6 +64,10 @@ struct vec3 {
 	vec3& operator= (const vec3& rhs);	
 	// internal data
 	float v[3];
+
+	float x();
+	float y();
+	float z();
 };
 
 struct vec4 {
@@ -70,6 +76,10 @@ struct vec4 {
 	vec4 (const vec2& vv, float z, float w);
 	vec4 (const vec3& vv, float w);
 	float v[4];
+	float x();
+	float y();
+	float z();
+	float w();
 };
 
 /* stored like this:

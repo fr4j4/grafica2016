@@ -25,6 +25,14 @@ vec2::vec2 (float x, float y) {
 	v[1] = y;
 }
 
+float vec2::x(){
+	return v[0];
+}
+
+float vec2::y(){
+	return v[1];
+}
+
 vec3::vec3 () {}
 
 vec3::vec3 (float x, float y, float z) {
@@ -43,6 +51,16 @@ vec3::vec3 (const vec4& vv) {
 	v[0] = vv.v[0];
 	v[1] = vv.v[1];
 	v[2] = vv.v[2];
+}
+
+float vec3::x(){
+	return v[0];
+}
+float vec3::y(){
+	return v[1];
+}
+float vec3::z(){
+	return v[2];
 }
 
 vec4::vec4 () {}
@@ -66,6 +84,20 @@ vec4::vec4 (const vec3& vv, float w) {
 	v[1] = vv.v[1];
 	v[2] = vv.v[2];
 	v[3] = w;
+}
+
+float vec4::x(){
+	return v[0];
+}
+float vec4::y(){
+	return v[1];
+}
+float vec4::z(){
+	return v[2];
+}
+
+float vec4::w(){
+	return v[3];
 }
 
 mat3::mat3 () {}
