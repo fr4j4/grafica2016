@@ -28,6 +28,7 @@ struct versor;
 
 struct vec2 {
 	vec2 ();
+	vec2 (vec3& v);
 	vec2 (float x, float y);
 	float v[2];
 	float x();
@@ -133,6 +134,7 @@ vec3 normalise (const vec3& v);
 float dot (const vec3& a, const vec3& b);
 vec3 cross (const vec3& a, const vec3& b);
 float get_squared_dist (vec3 from, vec3 to);
+float get_squared_dist (vec2 from, vec2 to);//lo mismo para vector2
 float direction_to_heading (vec3 d);
 vec3 heading_to_direction (float degrees);
 // matrix functions

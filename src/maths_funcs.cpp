@@ -20,6 +20,11 @@
 /*--------------------------------CONSTRUCTORS--------------------------------*/
 vec2::vec2 () {}
 
+vec2::vec2 (vec3& v3) {//pasar de vec3 a vec2
+	v[0]=v3.v[0];
+	v[1]=v3.v[2];
+}
+
 vec2::vec2 (float x, float y) {
 	v[0] = x;
 	v[1] = y;
@@ -286,6 +291,13 @@ float get_squared_dist (vec3 from, vec3 to) {
 	float z = (to.v[2] - from.v[2]) * (to.v[2] - from.v[2]);
 	return x + y + z;
 }
+
+float get_squared_dist (vec2 from, vec2 to) {
+	float x = (to.v[0] - from.v[0]) * (to.v[0] - from.v[0]);
+	float z = (to.v[2] - from.v[2]) * (to.v[2] - from.v[2]);
+	return x + z;
+}
+
 
 /* converts an un-normalised direction into a heading in degrees
 NB i suspect that the z is backwards here but i've used in in

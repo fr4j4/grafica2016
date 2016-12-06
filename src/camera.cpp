@@ -56,23 +56,24 @@ void camera::update(){
 	mat4 T= identity_mat4();
 	if(target!=NULL){
 		
-		float r=sqrt(get_squared_dist(target->pos,vec3(cam_pos[0],cam_pos[1],cam_pos[2])));
-		
-		//r=2.0f;
+		float r=sqrt(get_squared_dist(vec2(target->pos.x(),target->pos.z()),vec2(cam_pos[0],cam_pos[2])));
+		r=(float)(((int)(r*100))/100.0f);
+		//r=3.0f;
 
-		float new_x=r*cos((target->rotation.y())*ONE_DEG_IN_RAD);
-		float new_z=r*-sin((target->rotation.y())*ONE_DEG_IN_RAD);
+		float new_x=r*cos(target->rotation.v[1]*ONE_DEG_IN_RAD);
+		float new_z=r*-sin(target->rotation.v[1]*ONE_DEG_IN_RAD);
 		
+		cam_pos[0]=new_x;
+		cam_pos[2]=new_z;
 		vec3 newpos=vec3(new_x,cam_pos[1],new_z);
-		newpos=normalise(newpos);
-		setPos(newpos.x(),cam_pos[1],newpos.z());
+		//newpos=normalise(newpos);
+		//setPos(newpos.x(),cam_pos[1],newpos.z());
 
 
 
-		T=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),
-			target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
+		T=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
 		printf("R:%f\n",r);
-		printf("cam_pos (%f,%f,%f) - target_rot (%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->rotation.v[0],target->rotation.v[1],target->rotation.v[2]);	
+		printf("cam_pos (%.3f,%.3f,%.3f) \ntarget_pos (%.3f,%.3f,%.3f) - target_rot(%.3f,%.3f,%.3f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2],target->rotation.v[0],target->rotation.v[1],target->rotation.v[2]);	
 	}else{
 		T = translate (identity_mat4 (), vec3 (-cam_pos[0], -cam_pos[1], -cam_pos[2])); // cam translation
 	}
