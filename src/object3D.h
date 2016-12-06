@@ -8,7 +8,6 @@
 #include "maths_funcs.h"
 class object3D{
 protected:
-	vec3 rotation;
 	mat4 M;
 	GLuint vao, vbo;
 	GLuint* shader_programme;
@@ -16,6 +15,7 @@ protected:
 	int mat_location=0;
 public:
 	std::string name;
+	vec3 rotation;
 	vec3 pos;
 	bool enabled;
 	object3D(const char*,GLuint*);
@@ -23,6 +23,8 @@ public:
 	GLuint getVao();
 	int getnumVertices();
 	void move  (float x,float y,float z);
+	void move_forward(float d);
+	void move_backward(float d);
 	void setPos(float x,float y,float z);
 	void rotate(float x,float y,float z);
 	void update();

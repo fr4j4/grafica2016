@@ -1,5 +1,5 @@
 #include "camera.h"
-
+#include <math.h>
 camera::camera(GLuint *shader_programme,int s_width,int s_height){
 	this->target=NULL;
 	screenWidth=s_width;
@@ -58,17 +58,21 @@ void camera::update(float t){
 	//mat4 view_mat = R * T;
 	mat4 view_mat =T;
 	if(target!=NULL){
-		cam_pos[2]=target->pos.v[2];
-		view_mat=translate(view_mat,vec3(0.0f,0.0f,cam_pos[2]+target->pos.v[2]*t));
+		//cam_pos[2]=target->pos.v[2];
+		//view_mat=translate(view_mat,vec3(0.0f,0.0f,cam_pos[2]+target->pos.v[2]*t));
+		//printf("ANTES:cam_pos(%f,%f,%f) - target_pos(%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2]);
+		float r=sqrt(get_squared_dist(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos));
+		//r=3.0f;
+		printf("R:%f\n",r);
+		T=identity_mat4();
+		float new_x=r*cos((target->rotation.v[1])*ONE_DEG_IN_RAD);
+		float new_z=-r*sin((target->rotation.v[1])*ONE_DEG_IN_RAD);
+		//setPos(new_x,cam_pos[1],new_z);
 		view_mat=look_at(vec3(cam_pos[0],cam_pos[1],cam_pos[2]),target->pos*-1.0f,vec3(0.0f,1.0f,0.0f));
-		if(cam_pos[0]+target->pos.v[0]>4){
-			cam_pos[0]-=4*t;
-		}
-		
-		if(cam_pos[0] + target->pos.v[0] <4 ){
-			cam_pos[0]+=4*t;
-		}
-		printf("cam_pos(%f,%f,%f) - target_pos(%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2]);
+		//printf("DESPUES:cam_pos(%f,%f,%f) - target_pos(%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->pos.v[0],target->pos.v[1],target->pos.v[2]);
+		printf("cam_pos (%f,%f,%f) - target_rot (%f,%f,%f)\n",cam_pos[0],cam_pos[1],cam_pos[2],target->rotation.v[0],target->rotation.v[1],target->rotation.v[2]);
+		//printf("R:%f\n",r );
+		//getchar();
 	}
 	glUniformMatrix4fv (view_mat_location, 1, GL_FALSE, view_mat.m);
 }

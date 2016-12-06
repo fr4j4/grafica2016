@@ -129,19 +129,21 @@ void gameEngine::read_input_controlls_keys(){
 
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_UP)) {
 		debug("UP",DBG_KEY_PRESSED);
-		c->move(-0.025,0.0,0.0);
+		c->move_forward(0.025);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_DOWN)){
 		debug("DOWN",DBG_KEY_PRESSED);
-		c->move(0.025,0.0,0.0);
+		c->move_backward(0.025);
 	}
 	if (GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_LEFT)) {
 		debug("LEFT",DBG_KEY_PRESSED);
+		c->rotate(0.0f,-5.0f,0.0f);
 		//ufo->rotate(0.0f,10.0f,0.0f);
 		//city->move(0.025,0.0,0.0);
 	}
 	else if(GLFW_PRESS == glfwGetKey (g_window, GLFW_KEY_RIGHT)){
 		debug("RIGHT",DBG_KEY_PRESSED);
+		c->rotate(0.0f,+5.0f,0.0f);
 		//ufo->rotate(0.0f,-10.0f,0.0f);
 		//city->move(-0.025,0.0,0.0);
 	}
@@ -171,9 +173,7 @@ void gameEngine::start(){
 					objs[i]->render();
 				}
 			}
-
 			read_input_keys();
-
 			if(!paused){
 				cam->update(elapsed_seconds);//actualizar la cámara
 				read_input_controlls_keys();
@@ -321,6 +321,12 @@ void gameEngine::load_scenario(std::string scenario_name){
 				obj->name=objectName;
 				obj->setPos(pos.v[0],pos.v[1],pos.v[2]);
 				addObj(obj);
+			}else if(nodeName=="camera"){
+				vec3 pos=vec3(0.0f,0.0f,0.0f);
+				pos.v[0]=atoi(n.child("position").attribute("x").value());
+				pos.v[1]=atoi(n.child("position").attribute("y").value());
+				pos.v[2]=atoi(n.child("position").attribute("z").value());
+				cam->setPos(pos.v[0],pos.v[1],pos.v[2]);
 			}
 
 		}

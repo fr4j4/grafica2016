@@ -1,4 +1,5 @@
 #include "object3D.h"
+#include <math.h>
 
 object3D::object3D(const char* file_name,GLuint* shader_programme){
 	this-> shader_programme=shader_programme;
@@ -24,6 +25,16 @@ void object3D::move(float x,float y,float z){
 	pos.v[0]-=x;
 	pos.v[1]-=y;
 	pos.v[2]-=z;
+}
+
+void object3D::move_forward(float d){
+	pos.v[0]+=d*cos(rotation.v[1]*ONE_DEG_IN_RAD);
+	pos.v[2]+=d*-sin(rotation.v[1]*ONE_DEG_IN_RAD);
+}
+
+void object3D::move_backward(float d){
+	pos.v[0]-=d*cos(rotation.v[1]*ONE_DEG_IN_RAD);
+	pos.v[2]-=d*-sin(rotation.v[1]*ONE_DEG_IN_RAD);
 }
 
 void object3D::setPos(float x,float y,float z){
